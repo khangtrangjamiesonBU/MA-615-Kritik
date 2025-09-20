@@ -1,0 +1,120 @@
+---
+Full name: Khang-Trang Nguyen
+title: "Kritik-Updated-Assignment"
+format:
+  pdf:
+    pdf-engine: xelatex
+---
+
+### The data measure the air quality every day through May to September
+
+```{r, warning=FALSE, message=FALSE}
+dat <- read.table("Student_Dataset_Assignment.txt", header = TRUE, sep = "\t")
+data (airquality)
+```
+
+### Load and quick examine the data
+
+```{r, warning=FALSE, message=FALSE}
+dat <- airquality
+str(dat)
+summary(dat)
+```
+
+### So, there are some NAs in columns Ozone and Solar. R
+
+### Check missing values carefully
+
+```{r, warning=FALSE, message=FALSE}
+colSums(is.na(dat))
+```
+
+### So, there are 37 NAs in column Ozone and 7 NAs in column Solar.R
+
+### Examine Variables Wind vs Temp
+
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(ggplot2)
+#graph data
+qplot(airquality$Wind, airquality$Temp)
+cor(airquality$Wind, airquality$Temp)
+qplot(airquality$Wind, airquality$Temp) + geom_smooth(method = "lm", se = FALSE)
+model <- lm(Temp ~ Wind, data = airquality)
+summary(model)
+```
+
+```{r, warning=FALSE, message=FALSE}
+coef(model)
+```
+
+### For every unit that wind increases, the temperature will decrease by about 1.23 units.
+
+## Residuals vs Fitted Values
+
+```{r, warning=FALSE, message=FALSE}
+qplot(fitted.values(model), residuals(model))
+qplot(fitted.values(model), residuals(model))+geom_smooth(method = "lm", se = FALSE)
+```
+
+### There's no pattern to this data, all the residuals scatter around the 0 line; therefore, Wind vs Temp have a weak linear relationship (since the correlation coefficient is -0.46.
+
+## Graph of correlation between Ozone level (y) vs Months (x)
+
+```{r, warning=FALSE, message=FALSE}
+library(ggplot2)
+
+ggplot(airquality, aes(x = factor(Month), y = Ozone)) +
+  geom_boxplot(na.rm = TRUE, fill = "lightblue") +
+  labs(title = "Ozone levels by Month",
+       x = "Month",
+       y = "Ozone (ppb)") +
+  theme_minimal()
+```
+
+### Conclusion: Ozone levels reach their highest values in August, while the lowest values occur in May and July.
+
+## Graph of correlation between Solar. R (y) vs Months (x)
+
+```{r, warning=FALSE, message=FALSE}
+library(ggplot2)
+
+ggplot(airquality, aes(x = factor(Month), y = Solar.R)) +
+  geom_boxplot(na.rm = TRUE, fill = "orange") +
+  labs(title = "Solar Radiation by Month",
+       x = "Month",
+       y = "Solar.R") +
+  theme_minimal()
+```
+
+### Conclusion: Solar radiation is highest in June and July, and lowest in May and September.
+
+## Graph of correlation between Wind (y) vs Months (x)
+
+```{r, warning=FALSE, message=FALSE}
+library(ggplot2)
+
+ggplot(airquality, aes(x = factor(Month), y = Wind)) +
+  geom_boxplot(na.rm = TRUE, fill = "lightgreen") +
+  labs(title = "Wind Speed by Month",
+       x = "Month",
+       y = "Wind (mph)") +
+  theme_minimal()
+```
+
+### Conclusion: Wind is strongest in May and weakest in August, with June showing moderate levels.
+
+## Graph of correlation between Temp (y) vs Months (x)
+
+```{r, warning=FALSE, message=FALSE}
+library(ggplot2)
+
+ggplot(airquality, aes(x = factor(Month), y = Temp)) +
+  geom_boxplot(na.rm = TRUE, fill = "tomato") +
+  labs(title = "Temperature by Month",
+       x = "Month",
+       y = "Temperature (°F)") +
+  theme_minimal()
+```
+
+### Conclusion: Temperature is lowest in May but peaks in July and August.
